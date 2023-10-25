@@ -1,0 +1,87 @@
+type Employee  {
+    string employee_id;
+    string first_name; 
+    string last_name; 
+    string job_title; 
+    string position; 
+    string role;
+    string department_id; 
+    string? supervisor_id; 
+    KpiData[] kpi_data; // An array of employee-specific Key Performance Indicators (KPIs)
+};
+
+type KpiData  {
+    string kpi_id; // Identifier for the KPI
+    string name; // Name of the KPI
+    float value; // Value of the KPI
+};
+type Departments  {
+    string department_id; // A unique identifier for each department
+    string name; // The name of the department
+    Objective[] objectives; // An array of departmental objectives
+};
+type Objective  {
+    string id;
+    string name; // Name of the objective
+    float weight; // Weight of the objective
+};
+type Supervisor  {
+    string _id; // A unique identifier for each supervisor
+    string employee_id; // A reference to the employee they supervise
+Employee[] assigned_employees; // An array of employee references under their supervision
+    KpiApproval[] kpi_approval_history; // A history of approved KPIs
+};
+type KpiApproval  {
+    string employee_id; // Employee for whom the KPI was approved
+    string kpi_id; // Identifier for the approved KPI
+    boolean approved; // Whether the KPI was approved (true/false)
+    string approval_date; // Date and time of approval
+};
+
+type KpiMetrics  {
+    string _id; // A unique identifier for each KPI metric
+    string name; // Name of the KPI metric (e.g., Peer Recognition, Professional Development)
+    string unit_of_measurement; // The unit used for measurement (e.g., percentage, time, score)
+    float weight; // The weight assigned to this KPI in departmental objectives
+};
+
+type User  {
+    string _id; // A unique identifier for each user
+    string username; // The username used for authentication
+    string password; // The hashed password for authentication
+    string authorization; // The user's role or authorization level within the system
+};
+
+type UserDetails  {
+    string username;
+    string? password;
+    boolean isHOD;
+    boolean isSupervisor;
+    boolean isEmployee;
+};
+
+type UpdatedUserDetails  {
+    string username;
+    string password;
+};
+
+type LoggedUserDetails  {|
+    string username;
+    boolean isHOD;
+    boolean isSupervisor;
+    boolean isEmployee;
+|};
+# Mutations
+
+addObjectives(name: String!, weight: Float!, departmentId: ID!): DepartmentObjective
+deleteObjectives(id: ID!): Boolean
+assignEmployeeToSupervisor(employee: Employee, supervisor: Supervisor, HOD: LoggedUserDetails): String
+addKPI(newKPI: KpiMetrics): String
+login(user: User): LoggedUserDetails
+
+#Queries
+
+    getAllObjectives: [Objective]
+    getKPIsEmployeeID(employee_id: String): [KpiData]
+
+
